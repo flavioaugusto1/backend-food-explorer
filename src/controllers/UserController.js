@@ -1,6 +1,6 @@
 class UserController {
   create(request, response) {
-    const { name, email } = request.body;
+    const { name, email, isAdmin } = request.body;
 
     return response.status(201).json({ name, email });
   }
