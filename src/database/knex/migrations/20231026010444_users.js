@@ -4,7 +4,6 @@ exports.up = knex => knex.schema.createTable("users", table => {
   table.string('email');
   table.string('password');
   table.boolean('isAdmin');
-  table.string('avatar')
   table.datetime('created_at').default(knex.fn.now());
   table.datetime('updated_at').default(knex.fn.now());
 })

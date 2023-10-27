@@ -3,7 +3,7 @@ exports.up = knex => knex.schema.createTable("dishes", (table) => {
   table.string("name");
   table.string("description");
   table.string("image");
-  table.string("price");
+  table.float("price");
   table.string("category");
   table.datetime("created_at").default(knex.fn.now());
   table.datetime("updated_at").default(knex.fn.now());

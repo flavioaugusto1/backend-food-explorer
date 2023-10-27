@@ -1,17 +1,34 @@
+const { hash } = require("bcryptjs")
 const AppError = require("../utils/AppError");
+const knex = require("../database/knex/index.js");
 
 class UserController {
-  create(request, response) {
-    const { name, email, role } = request.body;
-    const verifyIsAdmin = role ? 'admin' : 'user';
+  async create(request, response) {
+    const { name, email, password } = request.body;
 
-    console.log(verifyIsAdmin)
-
-    if (!name) {
-      throw new AppError("Nome do usuário não foi informado.");
+    if(!password){
+      throw new AppError("A senha não foi informada.")
     }
 
-    return response.status(201).json({ name, email });
+    const checkerUserExists = await knex("users")
+      .where("email", email)
+      .select("*")
+      .first();
+
+    if (checkerUserExists) {
+      throw new AppError("Este email já está em uso.");
+    }
+
+    const hashedPassword = await hash(password, 8)
+    
+    await knex("users").insert({
+      name,
+      email,
+      password: hashedPassword,
+      isAdmin: false
+    })
+    
+    return response.status(201).json({message: "Usuário criado com sucesso."});
   }
 }
 
