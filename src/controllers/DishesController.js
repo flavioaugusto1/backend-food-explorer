@@ -73,7 +73,7 @@ class DishesController {
       description: description,
       category: category,
       price: price,
-      image: image
+      image: image,
     });
 
     await knex("ingredients").where({ dishes_id }).del();
