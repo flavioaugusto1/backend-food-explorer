@@ -25,7 +25,6 @@ class UserController {
       name,
       email,
       password: hashedPassword,
-      isAdmin: false
     })
     
     return response.status(201).json({message: "Usuário criado com sucesso."});
