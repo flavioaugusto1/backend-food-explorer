@@ -26,7 +26,7 @@ class SessionsController {
       expiresIn,
     });
 
-    return response.json({ token: token });
+    return response.json({ token: token, user });
   }
 }
 
