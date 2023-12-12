@@ -49,7 +49,7 @@ class DishesController {
 
       return response.json(searchDishes);
     } catch (error) {
-      throw new AppError("Não foi possível localizar os pratos")
+      throw new AppError("Não foi possível localizar os pratos");
     }
   }
 
