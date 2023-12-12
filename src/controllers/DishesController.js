@@ -27,26 +27,30 @@ class DishesController {
 
   async index(request, response) {
     const { search } = request.query;
+    try {
+      let searchDishes = await knex("dishes").select([
+        "dishes.id",
+        "dishes.name",
+        "dishes.description",
+        "dishes.price",
+        "dishes.category",
+        "dishes.image",
+      ]);
 
-    let searchDishes = await knex("dishes").select([
-      "dishes.id",
-      "dishes.name",
-      "dishes.description",
-      "dishes.price",
-      "dishes.category",
-      "dishes.image",
-    ]);
+      if (search) {
+        searchDishes = await knex("dishes")
+          .select("dishes.*")
+          .where("ingredients.name", "like", `%${search}%`)
+          .orWhere("dishes.name", "like", `%${search}%`)
+          .orWhere("dishes.category", "like", `%${search}%`)
+          .join("ingredients", "dishes.id", "ingredients.dishes_id")
+          .distinct();
+      }
 
-    if (search) {
-      searchDishes = await knex("dishes")
-        .select("dishes.*")
-        .where("ingredients.name", "like", `%${search}%`)
-        .orWhere("dishes.name", "like", `%${search}%`)
-        .join("ingredients", "dishes.id", "ingredients.dishes_id")
-        .distinct();
+      return response.json(searchDishes);
+    } catch (error) {
+      throw new AppError("Não foi possível localizar os pratos")
     }
-
-    return response.json({ searchDishes });
   }
 
   async show(request, response) {
