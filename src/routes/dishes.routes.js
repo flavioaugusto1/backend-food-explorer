@@ -18,19 +18,19 @@ dishesRoutes.use(ensureAuthenticated);
 
 dishesRoutes.post(
   "/register",
-  verifyUserAuthorization(["admin"]),
+  verifyUserAuthorization(["customer"]),
   dishesController.create
 );
 
 dishesRoutes.put(
   "/update/:id",
-  verifyUserAuthorization(["admin"]),
+  verifyUserAuthorization(["customer"]),
   dishesController.update);
 
 dishesRoutes.patch(
   "/image/:id",
   upload.single("image"),
-  verifyUserAuthorization(["admin"]),
+  verifyUserAuthorization(["customer"]),
   dishesLogoController.update
 );
 
@@ -39,7 +39,7 @@ dishesRoutes.get("/all", dishesController.index);
 
 dishesRoutes.delete(
   "/delete/:id",
-  verifyUserAuthorization(["admin"]),
+  verifyUserAuthorization(["customer"]),
   dishesController.delete
 );
 
