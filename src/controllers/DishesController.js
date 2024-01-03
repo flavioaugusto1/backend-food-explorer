@@ -3,8 +3,7 @@ const knex = require("../database/knex/index.js");
 
 class DishesController {
   async create(request, response) {
-    const { name, description, image, price, category, ingredients } =
-      request.body;
+    const { name, description, price, category, ingredients } = request.body;
 
     const [dishes_id] = await knex("dishes").insert({
       name,
@@ -22,7 +21,9 @@ class DishesController {
 
     await knex("ingredients").insert(insertIngredients);
 
-    return response.status(201).json({ message: "Prato criado com sucesso!" });
+    return response
+      .status(201)
+      .json({ id: dishes_id, message: "Prato criado com sucesso!" });
   }
 
   async index(request, response) {
