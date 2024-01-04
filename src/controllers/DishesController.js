@@ -1,6 +1,6 @@
 const AppError = require("../utils/AppError");
 const knex = require("../database/knex/index.js");
-
+const DiskStorage = require("../providers/DiskStorage.js");
 class DishesController {
   async create(request, response) {
     const { name, description, price, category, ingredients } = request.body;
@@ -97,6 +97,15 @@ class DishesController {
 
   async delete(request, response) {
     const { id } = request.params;
+
+    const diskStorage = new DiskStorage();
+
+    const [dish] = await knex("dishes").where({ id });
+
+    console.log(dish);
+    if (dish.image) {
+      await diskStorage.deleteFile(dish.image);
+    }
 
     await knex("dishes").where({ id }).delete();
 
