@@ -102,7 +102,6 @@ class DishesController {
 
     const [dish] = await knex("dishes").where({ id });
 
-    console.log(dish);
     if (dish.image) {
       await diskStorage.deleteFile(dish.image);
     }

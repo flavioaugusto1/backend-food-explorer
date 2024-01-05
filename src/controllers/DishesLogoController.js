@@ -20,7 +20,6 @@ class DishesLogoController {
     }
 
     const filename = await diskStorage.saveFile(imageFilename);
-    console.log(filename);
     dish.image = filename;
 
     await knex("dishes").update(dish).where({ id });
