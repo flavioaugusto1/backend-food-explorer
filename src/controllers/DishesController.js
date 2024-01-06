@@ -5,25 +5,37 @@ class DishesController {
   async create(request, response) {
     const { name, description, price, category, ingredients } = request.body;
 
-    const [dishes_id] = await knex("dishes").insert({
-      name,
-      description,
-      price,
-      category,
-    });
+    if (!name || !description || !price || !category || !ingredients) {
+      throw new AppError("Você não preencheu todos os campos necessários.");
+    }
 
-    const insertIngredients = ingredients.map((ingredient) => {
-      return {
-        name: ingredient,
-        dishes_id,
-      };
-    });
+    if (ingredients.length < 1) {
+      throw new AppError("Você precisa informar pelo menos um ingrediente.");
+    }
 
-    await knex("ingredients").insert(insertIngredients);
+    try {
+      const [dishes_id] = await knex("dishes").insert({
+        name,
+        description,
+        price,
+        category,
+      });
 
-    return response
-      .status(201)
-      .json({ id: dishes_id, message: "Prato criado com sucesso!" });
+      const insertIngredients = ingredients.map((ingredient) => {
+        return {
+          name: ingredient,
+          dishes_id,
+        };
+      });
+
+      await knex("ingredients").insert(insertIngredients);
+
+      return response
+        .status(201)
+        .json({ id: dishes_id, message: "Prato criado com sucesso!" });
+    } catch (error) {
+      throw new AppError("Não foi possível localizar o prato");
+    }
   }
 
   async index(request, response) {
